@@ -1,0 +1,11 @@
+.btnMain {
+    width: 100%;
+    max-width: 450px;
+    padding: 1.2rem;
+    background-color: var(--color-brand--);
+
+
+    &:hover {
+        background-color: var(--color-text--);
+    }
+}

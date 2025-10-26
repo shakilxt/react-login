@@ -1,0 +1,38 @@
+.innerFormContainer {
+  max-width: 480px;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.innerFormContainer h3 {
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0px;
+}
+.innerFormContainer .thirdLoginContainer .thirdLogin {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+.innerFormContainer .formContainer {
+  margin-top: 1.7rem;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.innerFormContainer .formContainer .mainButtonArea p {
+  text-align: right;
+}
+.innerFormContainer .formContainer .mainButtonArea p:last-child {
+  text-align: center;
+}
+.innerFormContainer .formContainer .mainButtonArea a {
+  cursor: pointer;
+}/*# sourceMappingURL=InnerFormContainer.module.css.map */

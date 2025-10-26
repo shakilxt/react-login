@@ -1,0 +1,33 @@
+.loginButton {
+  flex-direction: row;
+  gap: 0.7rem;
+  background-color: var(--color-bg--);
+  border: 1px solid var(--color-border--);
+  color: var(--color-text--);
+  align-items: center;
+}
+.loginButton i {
+  font-size: 1.3rem;
+  line-height: normal;
+}
+.loginButton:hover {
+  border: 1px solid var(--color-brand--);
+  color: var(--color-bg--);
+}
+.loginButton:hover i {
+  background: white;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.loginButton .google {
+  background: conic-gradient(from -45deg, #ea4335 110deg, #4285f4 90deg 180deg, #34a853 180deg 270deg, #fbbc05 270deg) 73% 55%/150% 150% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.loginButton .facebook {
+  color: #1877F2;
+}/*# sourceMappingURL=LoginButton.module.css.map */

@@ -1,0 +1,33 @@
+.container {
+    min-height: 100vh;
+    background-color: var(--color-border--);
+    background-image: url("https://www.transparenttextures.com/patterns/church.png");
+
+    .innerContainer {
+        height: 100%;
+        display: flex;
+
+        .percentContainer {
+            width: 100%;
+            min-height: 100vh;
+            max-width: 780px;
+            background-color: var(--color-bg--);
+            margin: 0 auto;
+            padding: 1rem 4rem;
+            display: block;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+            .postsContainer {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+
+
+    }
+
+}

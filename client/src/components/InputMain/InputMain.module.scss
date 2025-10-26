@@ -1,0 +1,33 @@
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    label {
+        span {
+            color: red;
+        }
+    }
+
+    input {
+        width: 100%;
+        padding: 1.2rem;
+        font-family: "Outfit", sans-serif;
+        margin-top: 0.5rem;
+        border: 1px solid var(--color-border--);
+        border-radius: 5px;
+        font-size: 1rem;
+        background-color: transparent;
+        color: var(--color-text--);
+
+        &::placeholder {
+            color: var(--color-p1--);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--color-text--);
+        }
+    }
+
+}

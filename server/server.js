@@ -15,4 +15,11 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/posts', postsRoutes)
 app.use('/api/auth', emailAuthRoutes)
 
+// CORS configuration to allow requests from the Vercel app
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
 export default app;

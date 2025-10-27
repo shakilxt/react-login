@@ -4,6 +4,9 @@ import { Link, Navigate } from 'react-router-dom'
 import InnerFormContainer from './InnerFormContainer/InnerFormContainer';
 import { useAuth } from '../../context/AuthContext';
 
+import siteLogo from '../../../public/assets/logo.png'
+import bannerImage from '../../../public/assets/banner.png'
+
 export default function HomePage() {
 
     const { user } = useAuth();
@@ -19,7 +22,7 @@ export default function HomePage() {
                 <div className={styles.formContainer}>
 
                     <div className={styles.logoContainer}>
-                        <img className={styles.logo} src="/src/assets/logo.png" alt="logo" />
+                        <img className={styles.logo} src={siteLogo} alt="logo" />
                     </div>
 
                     <InnerFormContainer />
@@ -29,7 +32,7 @@ export default function HomePage() {
 
                 <div className={styles.bannerContainer}>
 
-                    <img src="src/assets/banner.png" alt="" />
+                    <img src={bannerImage} alt="" />
 
                 </div>
 

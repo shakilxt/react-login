@@ -1,14 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MainIconButton from './MainIconButton';
 
-export default function PostsInput({ onPostSubmit, hidePostsInput }) {
+export default function PostsInput({ onPostSubmit, hidePostsInput, initialData = {} }) {
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
+    const isEditMode = Boolean(initialData && initialData.id)
+
+    useEffect (() => {
+        if (isEditMode) {
+            setTitle(initialData.title || '');
+            setDescription(initialData.description || '');
+        } else {
+            console.log("RESETTING INPUTS");
+            setTitle('');
+            setDescription('');
+        }
+    }, [initialData, isEditMode]);
+
     const handlePostSubmit = () => {
+        const payload = {
+            title, description
+        }
+
+        if (isEditMode) {
+            payload.id = initialData.id;
+        }
+
         if (onPostSubmit) {
-            onPostSubmit(title, description);
+            onPostSubmit(payload);
         }
 
         setTitle("");
@@ -35,7 +56,7 @@ export default function PostsInput({ onPostSubmit, hidePostsInput }) {
 
                 <MainIconButton
                     styles="bg-brand"
-                    icon="fa-solid fa-send"
+                    icon={isEditMode ? "fa-solid fa-save" : "fa-solid fa-send"}
                     buttonClick={handlePostSubmit}
                 />
 

@@ -1,6 +1,10 @@
+import DeleteModal from '../../../components/DeleteModal/DeleteModal';
 import MainIconButton from './MainIconButton';
+import React, { useState } from 'react';
+import postService from '../../../api/postService';
+import AnimatedMessage from '../../../components/AnimateMessage/AnimateMessage';
 
-export default function PostItem({ post }) {
+export default function PostItem({ post, user, afterDeletePost, onEdit }) {
 
     const portraits = ['https://randomuser.me/api/portraits/men/90.jpg',
         'https://randomuser.me/api/portraits/men/10.jpg',
@@ -20,6 +24,59 @@ export default function PostItem({ post }) {
     const randomProfession = () => {
         const index = Math.floor(Math.random() * professions.length);
         return professions[index];
+    }
+
+
+    
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState(null);
+
+    const handleOpenModal = (postId) => {
+        setIsModalOpen(true);
+        setItemToDelete(postId);
+    }
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+        setItemToDelete(null);
+    }
+
+    const handleConfirmDelete = () => {
+        handlePostDeletion(itemToDelete);
+        handleCloseModal();
+    }
+
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState(null);
+
+    const handlePostEditRequest = (post) => {
+        if (post.user_id !== user.id) {
+            setDeleteError('You are not authorized to edit this post.');
+            return;
+        }
+        onEdit(post);
+    }
+
+    const handlePostDeletion = async (postId) => {
+        console.log("DELETING: " + postId);
+
+        setIsDeleting(true);
+        setDeleteError(null);
+
+        try {
+
+            await postService.deletePost(postId);
+
+            afterDeletePost(postId);
+
+        } catch (error) {
+            setDeleteError(error.response?.data?.message || 'Failed to delete post');
+            console.error('Failed to delete post:', error);
+        } finally {
+            setIsDeleting(false);
+            handleCloseModal();
+        }
     }
 
 
@@ -67,12 +124,44 @@ export default function PostItem({ post }) {
 
 
 
-            <div>
+            <div className='flex justify-between'>
+
                 <MainIconButton
                     styles="bg-gray-800"
                     icon="fa-solid fa-thumbs-up"
+                    buttonClick={() => {
+                        console.log(post);
+                    }}
                 />
+
+                {/* {isPostOwner && ( */}
+                    <div>
+
+                        <MainIconButton
+                            styles="bg-gray-600 ml-2"
+                            icon="fa-solid fa-pen"
+                            buttonClick={() => handlePostEditRequest(post)}
+                        />
+
+                        <MainIconButton
+                            styles="bg-gray-600 ml-2 hover:bg-red-400"
+                            icon="fa-solid fa-trash"
+                            buttonClick={() => handleOpenModal(post.id)}
+                        />
+
+                        <DeleteModal
+                            isOpen={isModalOpen}
+                            onClose={handleCloseModal}
+                            onConfirm={handleConfirmDelete}
+                        />
+
+                    </div>
+                
+                {/* )} */}
+
             </div>
+                    
+            <AnimatedMessage message={deleteError} onDismiss={() => setDeleteError(null)} />
 
         </div>
     )

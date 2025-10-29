@@ -13,12 +13,11 @@ export default function PostsPage() {
     const navigate = useNavigate();
 
     const accessToken = localStorage.getItem('accessToken');
+    console.log(accessToken);
 
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const [showAddPosts, setShowAddPosts] = useState(false);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
@@ -28,7 +27,7 @@ export default function PostsPage() {
             try {
 
                 const response = await postService.getAllPosts();
-                setPosts(response.data);
+                setPosts(response);
 
             } catch (error) {
                 setError('Could not fetch posts');
@@ -45,28 +44,65 @@ export default function PostsPage() {
         navigate('/login');
     }
 
-    const handleCreatePost = async (title, description) => {
-        console.log("POST CREATING");
+    const [postToEdit, setPostToEdit] = useState(null);
+    const [isFormVisible, setIsFormVisible] = useState(false);
+
+    const handleFormSubmit = async (postData) => {
+
+        console.log("FORM SUBMITTED: ", postData);
 
         setIsSubmitting(true);
         setSubmitError(null);
 
-        try {
+        if (postData.id) {
+            try {
+                const updatedPost = await postService.updatePost(postData.id, {
+                    title: postData.title,
+                    description: postData.description
+                });
 
-            const response = await postService.createPost({
-                title: title,
-                description: description
-            })
+                setPosts(posts.map(p => (p.id === updatedPost.id ? updatedPost : p)));
 
-            setPosts([response.data, ...posts]);
+            } catch (error) {
+                console.error("Failed to update post:", error);
+            }
+        } else {
+            try {
 
-        } catch (error) {
-            setSubmitError('Failed to create post');
-            console.error('Failed to create post:', error);
-        } finally {
-            setIsSubmitting(false);
-            setShowAddPosts(false);
+                const newPost = await postService.createPost({
+                    title: postData.title,
+                    description: postData.description
+                });
+
+                setPosts([newPost, ...posts]);
+
+            } catch (error) {
+                console.error("Failed to create post:", error);
+            }
         }
+
+        setIsSubmitting(false);
+        setPostToEdit(null);
+        setIsFormVisible(false);
+    };
+
+    const handleStartEdit = (post) => {
+        setPostToEdit(post);
+        setIsFormVisible(true);
+    };
+
+    const handleCancel = () => {
+        setPostToEdit(null);
+        setIsFormVisible(false);
+    };
+
+    const showCreateForm = () => {
+        setPostToEdit(null);
+        setIsFormVisible(!isFormVisible);
+    }
+
+    const handleDeletedPost = (postId) => {
+        setPosts(posts.filter(p => p.id !== postId));
     }
 
     return (
@@ -76,17 +112,17 @@ export default function PostsPage() {
                 <div className='w-full'>
 
                     <Header user={user}
-                        addPost={() => setShowAddPosts(!showAddPosts)}
+                        addPost={showCreateForm}
                         logout={handleLogout}
-                        showAddPosts={showAddPosts}
+                        showAddPosts={isFormVisible}
                     />
 
-                    {showAddPosts && (
+                    {isFormVisible && (
                         <PostsInput
-                            onPostSubmit={handleCreatePost}
-                            hidePostsInput={() => setShowAddPosts(false)} />
+                            onPostSubmit={handleFormSubmit}
+                            hidePostsInput={handleCancel}
+                            initialData={postToEdit} />
                     )}
-
 
                     <div className='mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6'>
 
@@ -95,7 +131,7 @@ export default function PostsPage() {
                             <div key={post.id}
                                 className=''>
 
-                                <PostItem post={post} />
+                                <PostItem post={post} user={user} afterDeletePost={handleDeletedPost} onEdit={handleStartEdit} />
 
                             </div>
 

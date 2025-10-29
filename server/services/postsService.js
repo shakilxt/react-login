@@ -8,6 +8,7 @@ export const getAllPostsWithAuthors = async () => {
             p.description,
             p.created_at,
             u.name,
+            u.id as user_id,
             u.email
         FROM
             posts p
@@ -44,11 +45,48 @@ export const createPost = async (postData, userId) => {
     return result.rows[0];
 };
 
-// export const createPost = async (postData, userId) => {
-//     const { title, description } = postData;
-//     const result = await db.query(
-//         'INSERT INTO posts (title, description, user_id) VALUES ($1, $2, $3) RETURNING *',
-//         [title, description, userId]
-//     );
-//     return result.rows[0];
-// }
+export const updatePostById = async (postId, userId, postData) => {
+    const { title, description } = postData;
+
+    const setClauses = [];
+    
+    const values = [postId, userId];
+
+    if (title !== undefined) {
+        setClauses.push(`title = $${values.length + 1}`);
+        values.push(title);
+    }
+
+    if (description !== undefined) {
+        setClauses.push(`description = $${values.length + 1}`);
+        values.push(description);
+    }
+    
+    if (setClauses.length === 0) {
+        return null; 
+    }
+
+    const setString = setClauses.join(', ');
+
+    const query = `
+        UPDATE posts 
+        SET ${setString} 
+        WHERE id = $1 AND user_id = $2 
+        RETURNING *
+    `;
+
+    try {
+        const { rows } = await db.query(query, values);
+        return rows[0] || null;
+    } catch (error) {
+        console.error("Error updating post in service: ", error);
+        throw error;
+    }
+};
+
+export const deletePostById = async (postId, userId) => {
+    const query = 'DELETE FROM posts WHERE id = $1 AND user_id = $2';
+    const values = [postId, userId];
+    const result = await db.query(query, values);
+    return result.rowCount;
+};

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styles from './PostInput.module.css'
-import MainButton from '../../../../components/Button/MainButton';
 import { motion, AnimatePresence } from 'framer-motion';
 import IconButton from '../../../../components/IconButton/IconButton';
+import MainButton from '../../../Login/components/MainButton'
 
 export default function PostInput( { onPostSubmit } ) {
 

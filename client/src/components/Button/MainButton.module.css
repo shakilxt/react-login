@@ -1,9 +1,0 @@
-.btnMain {
-  width: 100%;
-  max-width: 450px;
-  padding: 1.2rem;
-  background-color: var(--color-brand--);
-}
-.btnMain:hover {
-  background-color: var(--color-text--);
-}/*# sourceMappingURL=MainButton.module.css.map */

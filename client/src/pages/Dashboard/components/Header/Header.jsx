@@ -1,14 +1,12 @@
 import IconButton from '../../../../components/IconButton/IconButton';
 import styles from './Header.module.css';
 
-import pageLogo from '../../../../../public/assets/logo.png'
-
 export default function Header() {
     return (
         <header className={styles.header}>
 
             <div className={styles.logoContainer}>
-                <img className={styles.logo} src={pageLogo} alt="logo" />
+                <img className={styles.logo} src="/assets/logo.png" alt="logo" />
             </div>
 
             <IconButton

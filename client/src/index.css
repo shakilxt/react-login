@@ -1,4 +1,20 @@
-* {
+@import "tailwindcss";
+
+@theme {
+    --color-brand: #009768;
+    --color-text: #191A2C;
+    --color-secondary-text: #555770;
+    --color-bg: #FFFFFF;
+    --color-border: #E6E8F0;
+    --color-p1: #A7A7A7;
+    
+    --default-font-family: "Outfit", sans-serif;
+
+}
+
+
+
+/* * {
     box-sizing: border-box;
     overflow-wrap: anywhere;
     word-wrap: break-word;
@@ -106,4 +122,4 @@ button:hover {
     button {
         background-color: #f9f9f9;
     }
-}
+} */

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import MainButton from '../../Login/components/MainButton';
 import MainIconButton from './MainIconButton';
 
 export default function PostsInput({ onPostSubmit, hidePostsInput }) {

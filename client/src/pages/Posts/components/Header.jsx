@@ -4,7 +4,7 @@ export default function Header({ user, addPost, logout, showAddPosts } ) {
     return (
         <div className='w-full flex justify-between items-center'>
 
-            <img src="/public/assets/s-epi.png" alt=""
+            <img src="/assets/s-epi.png" alt=""
                 className='w-30' />
 
             <div className="flex gap-3">

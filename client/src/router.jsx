@@ -3,7 +3,7 @@ import HomePage from "./pages/Home/HomePage.jsx"
 import LoginPage from "./pages/Login/LoginPage.jsx"
 
 import ProtectedRoute from "./components/PR/ProtectedRoute.jsx"
-import DashboardPage from "./pages/Dashboard/DashboardPage.jsx"
+import PostsPage from "./pages/Posts/PostsPage.jsx"
 
 const router = createBrowserRouter([
     {
@@ -19,8 +19,8 @@ const router = createBrowserRouter([
         element: <HomePage /> // Replace with RegisterPage
     },
     {
-        path: "/dashboard",
-        element: <ProtectedRoute><DashboardPage /></ProtectedRoute>,
+        path: "/posts",
+        element: <ProtectedRoute><PostsPage /></ProtectedRoute>,
     }
 ])
 

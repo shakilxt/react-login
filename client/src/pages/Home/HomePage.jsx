@@ -5,7 +5,7 @@ export default function HomePage() {
 
     const { user } = useAuth();
     if (user) {
-        return <Navigate to="/dashboard" replace />
+        return <Navigate to="/posts" replace />
     } else {
         return <Navigate to="/login" replace />
     }

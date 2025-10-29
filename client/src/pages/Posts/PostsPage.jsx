@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import styles from './DashboardPage.module.scss';
-
-import Header from './components/Header/Header';
-import PostInput from './components/PostInput/PostInput';
-
+import { useEffect } from 'react';
 import postService from '../../api/postService';
-import PostItem from './components/PostItem/PostItem';
+import Header from './components/Header';
+import PostItem from './components/PostItem';
+import PostsInput from './components/PostsInput';
 
-const DashboardPage = () => {
+export default function PostsPage() {
 
     const { user, logout } = useAuth();
     const navigate = useNavigate();
@@ -19,6 +17,8 @@ const DashboardPage = () => {
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [showAddPosts, setShowAddPosts] = useState(false);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
@@ -43,9 +43,11 @@ const DashboardPage = () => {
     const handleLogout = () => {
         logout();
         navigate('/login');
-    };
+    }
 
-    const handleCreatePost = async(title, description) => {
+    const handleCreatePost = async (title, description) => {
+        console.log("POST CREATING");
+
         setIsSubmitting(true);
         setSubmitError(null);
 
@@ -57,48 +59,56 @@ const DashboardPage = () => {
             })
 
             setPosts([response.data, ...posts]);
-            
+
         } catch (error) {
             setSubmitError('Failed to create post');
             console.error('Failed to create post:', error);
         } finally {
             setIsSubmitting(false);
+            setShowAddPosts(false);
         }
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles.innerContainer}>
+        <div className='min-h-screen bg-gray-900 px-4 lg:px-8 text-gray-50 place-items-center'>
+            <div className='w-full min-h-screen h-full max-w-2xl lg:max-w-7xl flex bg-gray-800 py-12 px-12'>
 
-                <div className={styles.percentContainer}>
+                <div className='w-full'>
 
-                    <Header />
-                    <hr style={{ border: '1px solid #eee', margin: '1rem 0' }} />
+                    <Header user={user}
+                        addPost={() => setShowAddPosts(!showAddPosts)}
+                        logout={handleLogout}
+                        showAddPosts={showAddPosts}
+                    />
 
-                    <PostInput onPostSubmit={handleCreatePost} />
-                    {isSubmitting && <p>Submitting post...</p>}
-                    {submitError && <p style={{ color: 'red' }}>{submitError}</p>}
+                    {showAddPosts && (
+                        <PostsInput
+                            onPostSubmit={handleCreatePost}
+                            hidePostsInput={() => setShowAddPosts(false)} />
+                    )}
 
-                    {isLoading && <p>Loading posts...</p>}
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                
-                    <div className={styles.postsContainer}>
+
+                    <div className='mt-12 grid grid-cols-1 lg:grid-cols-2 gap-6'>
+
                         {posts.map((post) => (
-                            <PostItem key={post.id} post={post} />
+
+                            <div key={post.id}
+                                className=''>
+
+                                <PostItem post={post} />
+
+                            </div>
+
                         ))}
+
                     </div>
 
-                    <div className={styles.content}>
-                        <p>You are logged in as: {user?.email}</p>
-                        <p>Your Access Token: {accessToken}</p>
-                        <button onClick={handleLogout}>Logout</button>
-                    </div>
 
                 </div>
 
-            </div>
-        </div>
-    );
-};
 
-export default DashboardPage;
+            </div>
+
+        </div>
+    )
+}

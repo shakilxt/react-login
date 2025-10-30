@@ -20,6 +20,8 @@ export default function PostsInput({ onPostSubmit, hidePostsInput, initialData =
     }, [initialData, isEditMode]);
 
     const handlePostSubmit = () => {
+        if (!title) return
+
         const payload = {
             title, description
         }

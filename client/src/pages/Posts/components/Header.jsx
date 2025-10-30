@@ -1,17 +1,17 @@
 import MainIconButton from "./MainIconButton"
 
-export default function Header({ user, addPost, logout, showAddPosts } ) {
+export default function Header({ user, addPost, logout, showAddPosts }) {
     return (
         <div className='w-full flex justify-between items-center'>
 
             <img src="/assets/s-epi.png" alt=""
-                className='w-30' />
+                className='w-30' draggable="false" />
 
             <div className="flex gap-3">
 
                 <MainIconButton
                     styles=""
-                    icon={`fa-solid fa-${showAddPosts ? 'xmark' : 'plus'}`}
+                    icon={`fa-regular fa-${showAddPosts ? 'xmark' : 'plus'}`}
                     buttonClick={addPost} />
 
                 <MainIconButton
@@ -25,7 +25,7 @@ export default function Header({ user, addPost, logout, showAddPosts } ) {
 
                 <MainIconButton
                     styles=""
-                    icon="fa-solid fa-right-from-bracket"
+                    icon="fa-light fa-right-from-bracket"
                     buttonClick={logout} />
 
 

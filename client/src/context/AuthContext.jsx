@@ -20,7 +20,6 @@ export const AuthProvider = ({ children }) => {
                     await authService.verify();
                     
                     const decoded = jwtDecode(localStorage.getItem('accessToken'));
-                    console.log(decoded);
                     setUser(decoded);
 
                 } catch (error) {
@@ -40,9 +39,9 @@ export const AuthProvider = ({ children }) => {
 
         try {   
 
-            const response = await authService.login(email, password);
+            const data = await authService.login(email, password);
 
-            const { accessToken, refreshToken } = response.data;
+            const { accessToken, refreshToken } = data;
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 
@@ -51,7 +50,7 @@ export const AuthProvider = ({ children }) => {
             return true;
 
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            setError(err.message || 'Login failed');
             return false;
         } finally {
             setLoading(false);
@@ -68,7 +67,7 @@ export const AuthProvider = ({ children }) => {
             return await handleLogin(email, password);
 
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed');
+            setError(err.message || 'Registration failed');
             return false;
         } finally {
             setLoading(false);
@@ -91,7 +90,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext.Provider value={{ user, loading, error, handleLogin, handleRegister, logout }}>
+        <AuthContext.Provider value={{ user, loading, error, setError, handleLogin, handleRegister, logout }}>
             {children}
         </AuthContext.Provider>
     )

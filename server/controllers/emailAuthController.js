@@ -1,8 +1,14 @@
 import * as emailAuthService from '../services/emailAuthService.js';
+import { validationResult } from 'express-validator';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
 export const register = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: errors.array()[0].msg });
+    }
+
     try {
 
         const { email } = req.body;
@@ -22,6 +28,11 @@ export const register = async (req, res) => {
 }
 
 export const login = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: errors.array()[0].msg });
+    }
+    
     try {
 
         const { email, password } = req.body;

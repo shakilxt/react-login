@@ -1,19 +1,49 @@
 import axiosInstance from './axiosInstance';
 
-const register = (name, email, password) => {
-    return axiosInstance.post('auth/register', { name, email, password });
+const handleError = (error) => {
+    if (error.response && error.response.data && error.response.data.message) {
+        throw new Error(error.response.data.message);
+    }
+    if (error.response && error.response.data) {
+        throw new Error(error.response.data || 'An error occurred on the server.');
+    }
+    throw new Error(error.message || 'An unknown network error occurred.');
+};
+
+const register = async (name, email, password) => {
+    try {
+        const response = await axiosInstance.post('auth/register', { name, email, password });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
 
-const login = (email, password) => {
-    return axiosInstance.post('auth/login', { email, password });
+const login = async (email, password) => {
+    try {
+        const response = await axiosInstance.post('auth/login', { email, password });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
 
-const logout = (refreshToken) => {
-    return axiosInstance.post('auth/logout', { token: refreshToken });
+const logout = async (refreshToken) => {
+    try {
+        const response = await axiosInstance.post('auth/logout', { token: refreshToken });
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
 
-const verify = () => {
-    return axiosInstance.get('auth/verify');
+const verify = async () => {
+    try {
+        const response = await axiosInstance.get('auth/verify');
+        return response.data;
+    } catch (error) {
+        handleError(error);
+    }
 }
 
 const authService = {

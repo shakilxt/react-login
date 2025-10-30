@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ThirdLoginButton from "./ThirdLoginButton";
 import InputMain from "./InputMain";
 import MainButton from "./MainButton";
+import LoadingSpinner from '../../../components/LoadingSpinner/LoadingSpinner';
 
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -15,7 +16,7 @@ export default function LoginForm() {
 
     const [isLogin, setIsLogin] = useState(true);
 
-    const { handleLogin, handleRegister, loading, error } = useAuth()
+    const { handleLogin, handleRegister, loading, error: authError, setError: setAuthError } = useAuth()
 
     const navigate = useNavigate()
 
@@ -23,11 +24,15 @@ export default function LoginForm() {
         e.preventDefault();
 
         if (isLogin) {
+            if (!email || !password) return;
+
             const success = await handleLogin(email, password);
             if (success) {
                 navigate('/dashboard');
             }
         } else {
+            if (!name || !email || !password || !confirmPassword) return;
+
             if (password !== confirmPassword) {
                 alert("Passwords do not match");
                 return;
@@ -35,6 +40,14 @@ export default function LoginForm() {
             await handleRegister(name, email, password);
         }
     }
+
+    useEffect(() => {
+
+        if (authError) {
+            setAuthError(null);
+        }
+
+    }, [isLogin]);
 
     return (
 
@@ -155,13 +168,25 @@ export default function LoginForm() {
                         <MainButton
                             type="submit"
                             disabled={loading}
-                            text={isLogin ? "Login" : "Create Account"}
+                            text={
+                                <div className='relative flex justify-center items-center gap-2'>
+
+                                    {
+                                        loading && <div className='absolute right-0'>
+                                            <LoadingSpinner color='fill-brand' bColor='text-gray-900' />
+                                        </div>
+                                    }
+
+                                    <span>{isLogin ? "Login" : "Create Account"}</span>
+
+                                </div>
+                            }
                         />
 
                         {
-                            error &&
+                            authError &&
                             <p className='text-red-500 text-center mt-2'>
-                                {error}</p>
+                                {authError}</p>
                         }
 
                         <div className="text-center mt-2">
